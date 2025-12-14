@@ -18,7 +18,7 @@ from pytensor.graph.op import Op
 pytensor.config.floatX = "float64"
 
 # Import the surrogate model module
-import MCMC_1D_surrogate_model_tasks as mcmc1D_surrogate
+from . import MCMC_1D_surrogate_model_tasks as mcmc1D_surrogate
 
 class PyTorchSurrogateOp(Op):
     """
