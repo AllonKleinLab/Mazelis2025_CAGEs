@@ -1,0 +1,12 @@
+.venv/
+.venv-clean/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.dist/
+build/
+*.egg-info/
+.coverage
+htmlcov/
+.ruff_cache/
+.DS_Store

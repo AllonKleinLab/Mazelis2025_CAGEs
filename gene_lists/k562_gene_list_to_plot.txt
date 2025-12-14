@@ -1,0 +1,10 @@
+TOP2A_hg
+GATA2_hg
+ALAS2_hg
+HBA1_hg
+KLF1_hg
+KRT8_hg
+SLC25A37_hg
+HBG2_hg
+VIM_hg
+S100A11_hg
