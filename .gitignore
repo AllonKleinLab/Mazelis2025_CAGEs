@@ -10,3 +10,7 @@ build/
 htmlcov/
 .ruff_cache/
 .DS_Store
+
+# Jupyter + Python caches
+**/.ipynb_checkpoints/
+**/__pycache__/
