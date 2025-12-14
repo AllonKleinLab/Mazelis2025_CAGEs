@@ -34,7 +34,7 @@ class PyTorchSurrogateOp(Op):
         p0 = pt.as_tensor_variable(p0).astype("float64")
         return Apply(self, [params, p0], [params.type()])
 
-    def perform(self, node, inputs, outputs):
+    def perform(self, _node, inputs, outputs):
         # Convert inputs to float64
         params = inputs[0].reshape(1, 2).astype(np.float64)
         p0 = float(inputs[1])  # Ensure float64
@@ -42,7 +42,7 @@ class PyTorchSurrogateOp(Op):
         # Ensure output is float64
         outputs[0][0] = np.array(y[0], dtype=np.float64)
 
-    def grad(self, inputs, output_grads):
+    def grad(self, inputs, _output_grads):
         # For Metropolis, we don't need gradients
         return [None, None]
 
