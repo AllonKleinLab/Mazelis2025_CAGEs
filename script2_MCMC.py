@@ -48,20 +48,27 @@ pytensor.config.floatX = "float64"
 import arviz as az
 
 
+import numpy as np
+import pandas as pd
+from tqdm import tqdm
 import pickle
+from typing import List, Tuple, Dict, Any  # Make sure typing import is complete
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Add helper_functions to path
-# from pathlib import Path
-# import sys
+from pathlib import Path
+import sys
 import importlib
-# helper_path = str(Path().absolute() / 'helper_functions')
-# if helper_path not in sys.path:
-#     sys.path.append(helper_path)
+helper_path = str(Path().absolute() / 'helper_functions')
+if helper_path not in sys.path:
+    sys.path.append(helper_path)
 
 # Import my functions specific to this project:
+import state_simulations_1D_v1 as ss1D
 from helper_functions import MCMC_1D_training_data_tasks as mcmc1D_training_data
 from helper_functions import MCMC_1D_surrogate_model_tasks as mcmc1D_surrogate
+#import MCMC_1D_pyMC_tasks as mcmc1D_pyMC
 from helper_functions import MCMC_1D_pyMC_cont_plots as mcmc_plots
 from helper_functions import plotting as hp
 
@@ -81,10 +88,11 @@ cont_results_file = f'./MCMC_data/mcmc_results_{cell_type}.csv'
 
 # %%
 # Adding this to allow constant reloads after making changes:
-if __name__ == '__main__':
-    mcmc1D_training_data = importlib.reload(mcmc1D_training_data)
+mcmc1D_training_data = importlib.reload(mcmc1D_training_data)
 
-if __name__ == '__main__':
+
+
+def main():
     divisions = [0, 2, 4, 6]
     n_sims = 4000 # Eventual number of simulations should be higher than this
     q_min = 1e-4
@@ -101,8 +109,7 @@ if __name__ == '__main__':
     # ### Visualize the mean and std of the model over the parameters from the simulations
 
     # %%
-    if __name__ == '__main__':
-        mcmc1D_training_data = importlib.reload(mcmc1D_training_data)
+    mcmc1D_training_data = importlib.reload(mcmc1D_training_data)
     t=4
     p0 = 0.5
     mcmc1D_training_data.mean_and_std_over_params((1-p0)*init1_dfs[t]+p0*init0_dfs[t], show_heatmaps=True)
@@ -115,8 +122,8 @@ if __name__ == '__main__':
     #
 
     # %%
-    if __name__ == '__main__':
-        mcmc1D_surrogate = importlib.reload(mcmc1D_surrogate)
+    from helper_functions import MCMC_1D_surrogate_model_tasks as mcmc1D_surrogate
+    mcmc1D_surrogate = importlib.reload(mcmc1D_surrogate)
 
     # Load data from cache
     with open(cache_file_path, 'rb') as f:
@@ -151,8 +158,7 @@ if __name__ == '__main__':
     #
 
     # %%
-    if __name__ == '__main__':
-        mcmc1D_surrogate = importlib.reload(mcmc1D_surrogate)
+    mcmc1D_surrogate = importlib.reload(mcmc1D_surrogate)
     model.plot_random_prediction_with_neighbors(init0_dfs[div_number])
     plt.show()
 
@@ -182,9 +188,8 @@ if __name__ == '__main__':
     # ### Generate trained models for all divisions, and save them for use in the PyMC code
 
     # %%
-    import MCMC_1D_surrogate_model_tasks as mcmc1D_surrogate
-    if __name__ == '__main__':
-        mcmc1D_surrogate = importlib.reload(mcmc1D_surrogate)
+    from helper_functions import MCMC_1D_surrogate_model_tasks as mcmc1D_surrogate
+    mcmc1D_surrogate = importlib.reload(mcmc1D_surrogate)
 
 
     # Load data from cache
@@ -235,8 +240,7 @@ if __name__ == '__main__':
 
     # %%
     import MCMC_1D_pyMC_cont_tasks as mcmc1Dcont_pyMC
-    if __name__ == '__main__':
-        mcmc1Dcont_pyMC = importlib.reload(mcmc1Dcont_pyMC)
+    mcmc1Dcont_pyMC = importlib.reload(mcmc1Dcont_pyMC)
 
     surrogate_model_path = './MCMC_data/saved_1D_surrogate_models_d2_4_6'
 
@@ -324,8 +328,7 @@ if __name__ == '__main__':
 
     # %%
     import MCMC_1D_pyMC_cont_tasks as mcmc1Dcont_pyMC
-    if __name__ == '__main__':
-        mcmc1Dcont_pyMC = importlib.reload(mcmc1Dcont_pyMC)
+    mcmc1Dcont_pyMC = importlib.reload(mcmc1Dcont_pyMC)
     surrogate_model_path = './MCMC_data/saved_1D_surrogate_models_d2_4_6'
 
     show_plots = False
@@ -334,7 +337,7 @@ if __name__ == '__main__':
 
     conditions = ['Ctrl','Aza','Dec','Vor']
     programs = range(15)
-    data_dir = './MCMC_data/'
+    data_dir = f'./MCMC_data/'
     nmf_usage_file = f'./MCMC_data/data_NMF_usage_{cell_type}.csv'
     nmf_data = pd.read_csv(nmf_usage_file)
     print(f'Loaded NMF data for {cell_type}...')
@@ -402,16 +405,14 @@ if __name__ == '__main__':
     # %%
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_fraction_nonzero(cont_mcmc_dict, program_id=2, figsize=(3, 3))
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_fraction_nonzero_{cell_type}_factor3_ALL.pdf')
 
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_mean_usage(cont_mcmc_dict, program_id=2, figsize=(3, 3))
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_mean_usage_{cell_type}_factor3_ALL.pdf')
@@ -421,16 +422,14 @@ if __name__ == '__main__':
     cont_results_df.columns
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
     f = 2
     cont_results_df = pd.read_csv(cont_results_file)
     fig = mcmc_plots.plot_transition_rates(cont_results_df, f, figsize=(3, 3))
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_transition_rates_{cell_type}_factor{f}_ALL.pdf')
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
     f = 2
     for cond in conditions:
         fig=mcmc_plots.plot_histograms(cont_mcmc_dict, cond, f, figsize=(1.0, 3))
@@ -441,24 +440,21 @@ if __name__ == '__main__':
     cont_results_df
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
     fig = mcmc_plots.plot_relative_transition_rates(cont_results_df, param='S',figsize=(3,3.5),xscale='log',xlim=(10**(-1),10**1))
     #fig.axes[0].set_xlim(0.1,10)  # Set y-axis limits from 0 to 1.2
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_transition_rates_{cell_type}_S_ALL.pdf')
     plt.show()
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates_heatmap(cont_results_df, param='S',figsize=(3,3.5),clim=None)
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_transition_rates_{cell_type}_S_heatmap.pdf')
     plt.show()
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates(cont_results_df, param='r',figsize=(3,3.5), xscale='log',xlim=(0.1,10))
     #fig.axes[0].set_xlim(0.1,10)  # Set y-axis limits from 0 to 1.2
@@ -473,16 +469,14 @@ if __name__ == '__main__':
     # fig = plot_relative_transition_rates(cont_results_df, param='r')
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates_heatmap(cont_results_df, param='r',figsize=(3,3.5),clim=None)
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_rate_ratio_{cell_type}_r_heatmap.pdf')
     plt.show()
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
     fig = mcmc_plots.plot_relative_transition_rates(cont_results_df, param='r01',figsize=(3,3.5), xscale='log',xlim=(0.01,100))
     #fig.axes[0].set_xlim(0.8, 200)  # or whatever limits you want
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_transition_rates_{cell_type}_r01_ALL.pdf')
@@ -495,16 +489,14 @@ if __name__ == '__main__':
     # fig = plot_relative_transition_rates(cont_results_df, param='r')
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates_heatmap(cont_results_df, param='r01',figsize=(3,3.5),clim=None)
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_on_rate_{cell_type}_r01_heatmap.pdf')
     plt.show()
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates(cont_results_df, param='r10',figsize=(3,3.5), xscale='log',xlim=(0.01,100))
     #fig.axes[0].set_xlim(0.8, 10)  # or whatever limits you want
@@ -518,16 +510,14 @@ if __name__ == '__main__':
     # fig = plot_relative_transition_rates(cont_results_df, param='r')
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates_heatmap(cont_results_df, param='r10',figsize=(3,3.5),clim=[-2,2])
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_off_rate_{cell_type}_r10_heatmap.pdf')
     plt.show()
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
     fig = mcmc_plots.plot_relative_transition_rates(cont_results_df, param='1/r01',figsize=(3,3.5), xscale='log',xlim=(0.01,100))
     #fig.axes[0].set_xlim(0.8, 200)  # or whatever limits you want
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_persistence_time_{cell_type}_t0_ALL.pdf')
@@ -536,16 +526,14 @@ if __name__ == '__main__':
 
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates_heatmap(cont_results_df, param='1/r10',figsize=(3,3.5),clim=[-2,2])
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_on_time_{cell_type}_t1_heatmap.pdf')
     plt.show()
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
     fig = mcmc_plots.plot_relative_transition_rates(cont_results_df, param='1/r10',figsize=(3,3.5), xscale='log',xlim=(0.01,100))
     #fig.axes[0].set_xlim(0.8, 200)  # or whatever limits you want
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_persistence_time_{cell_type}_t1_ALL.pdf')
@@ -554,32 +542,28 @@ if __name__ == '__main__':
 
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates_heatmap(cont_results_df, param='1/r01',figsize=(3,3.5),clim=None)
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_off_time_{cell_type}_t0_heatmap.pdf')
     plt.show()
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates_heatmap(cont_results_df, param='min_t',figsize=(3,3.5),clim=None)
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_max_persistence_time_{cell_type}_min_t_heatmap.pdf')
     plt.show()
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates_heatmap(cont_results_df, param='1/S',figsize=(3,3.5),clim=[-3,3])
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_persistence_time_{cell_type}_1_S_heatmap.pdf')
     plt.show()
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     fig = mcmc_plots.plot_relative_transition_rates_heatmap(cont_results_df, param='t1_frac',figsize=(3,3.5),clim=[-1,1])
     hp.save_editable_pdf(fig, f'./MCMC_data/plots/MCMC_1Dcont_relative_bias_{cell_type}_t1_frac_heatmap.pdf')
@@ -634,8 +618,7 @@ if __name__ == '__main__':
     plt.show()
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
     gene_persistence_times_dict = mcmc_plots.calculate_gene_persistence_times(cont_results_df, H, conditions=['Ctrl', 'Aza', 'Dec', 'Vor'], debug=True )
     gene_persistence_times_dict['1/S']
 
@@ -661,8 +644,7 @@ if __name__ == '__main__':
     np.sum(np.abs(deg_results_dict['Aza']['mean_logFC'])>=0.1)
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     cond = ['Aza','Dec','Vor']
 
@@ -691,8 +673,7 @@ if __name__ == '__main__':
 
 
     # %%
-    if __name__ == '__main__':
-        mcmc_plots = importlib.reload(mcmc_plots)
+    mcmc_plots = importlib.reload(mcmc_plots)
 
     cond = ['Aza','Dec','Vor']
 
@@ -727,3 +708,7 @@ if __name__ == '__main__':
 
 
     # %%
+
+
+if __name__ == '__main__':
+    main()
