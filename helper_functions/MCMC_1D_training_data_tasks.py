@@ -1,4 +1,4 @@
-import state_simulations_1D_v1 as ss
+from . import state_simulations_1D_v1 as ss
 import numpy as np
 import pandas as pd
 from tqdm import tqdm

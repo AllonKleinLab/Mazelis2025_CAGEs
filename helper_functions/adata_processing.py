@@ -5,21 +5,12 @@ import scanpy.external as sce
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import math
-import seaborn as sns
 import glob
-import re
-import gc
 
 from sklearn.decomposition import NMF
 
 import psutil
-import time
-import traceback
-import sys
 
-from openpyxl import Workbook
-from openpyxl.styles import Font
 
 #from scipy import sparse
 #from scipy.linalg import svd
@@ -411,7 +402,7 @@ def run_preprocess_and_harmony(adata, num_pcs=10, use_harmony=False, use_NMF=Fal
     #adata.obs['pca_ref']=False
     #adata.obs.loc[ref_mask,'pca_ref']=True
     #run_PCA_projected(adata, reference_col='pca_ref',reference_val=True, num_pcs=6)
-    if use_NMF == False:
+    if not use_NMF:
         sc.pp.pca(adata,n_comps=num_pcs,layer='log',mask_var="highly_variable")
     else:
         print('Running NMF:')
@@ -607,12 +598,7 @@ def get_nmf_usage_stats(W, adata, condition=None):
 ############################################################################################
 ############################################################################################
 
-import difflib
-import numpy as np
-import pandas as pd
 
-import difflib
-import pandas as pd
 import anndata as ad
 
 def plot_gene_usage(H, gene_names, gene, prog_list=None):
@@ -664,10 +650,7 @@ def plot_gene_usage(H, gene_names, gene, prog_list=None):
 
 
 
-import numpy as np
 from scipy import sparse
-import anndata as ad
-import pandas as pd
 
 def create_averaged_usage_matrices(ad_sc, timepoint_ns):
     all_adata = []
@@ -832,7 +815,7 @@ def create_count_based_clones(ad_sc, ref_df, n_cells_per_timepoint):
         projected_W = nmf_model.transform(log_counts[:, hvg_indices])
         
         n_clones = combined_counts.shape[0]
-        n_genes = ad_sc.n_vars
+        _n_genes = ad_sc.n_vars
         
         # Create obs DataFrame
         obs_dict = {
@@ -882,7 +865,7 @@ def get_gene_cv_mean_dataframes(adata):
     # Get the timepoints
     timepoints = adata.obs['timepoint'].unique()
     # Get the genes
-    genes = adata.var_names
+    _genes = adata.var_names
     cv_mean_dict = {}
     
     # Loop over conditions:
@@ -1104,7 +1087,6 @@ def create_regressed_randomized_cv(mean_dict, rnd_mean_dict, rnd_cv_dict):
  ###########################################################################################
  ###########################################################################################
 from sklearn.decomposition import TruncatedSVD
-import numpy as np
 
 def compare_variance_explained(adata, n_components=20, sample_frac=0.1, n_permutations=10):
     # Get subset and convert to dense
@@ -1173,7 +1155,7 @@ def vectorized_ranksums(x_groups, y_groups):
     
     # Split ranks back into x and y groups
     x_ranks = ranks[:, :n_x]
-    y_ranks = ranks[:, n_x:]
+    _y_ranks = ranks[:, n_x:]
     
     # Calculate rank sums and sample sizes
     n1 = x_groups.shape[1]
