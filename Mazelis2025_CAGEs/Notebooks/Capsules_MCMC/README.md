@@ -5,7 +5,7 @@ This directory contains the cleaned notebooks and scripts used
 for capsule-based analysis and 1D MCMC modeling in the Mazelis et al. (2025) study.
 
 
-## CONTENTS
+### CONTENTS
 
 - *script1_Capsule_processing.ipynb*
   Preprocessing and analysis of single-cell data, supporting Fig. 4 of the paper.
@@ -28,48 +28,46 @@ for capsule-based analysis and 1D MCMC modeling in the Mazelis et al. (2025) stu
 - *environment_script2_pymc_arm.yml*
   Conda environment for PyMC-based MCMC analysis (Apple Silicon).
 
-------------------------------------------------------------
 
-## REQUIRED INPUT DATA (NOT INCLUDED)
+### REQUIRED INPUT DATA
 
-The notebooks expect access to preprocessed AnnData (.h5ad) files containing
+- The notebooks expect access to preprocessed AnnData (.h5ad) files containing
 single-cell expression data. These files are not included in this repository
 due to size constraints.
 
-Please download the required data from the associated Zenodo record
+- Please download the required data from the associated Zenodo record
 (see the manuscript or the repository root README) and place them in a directory
 named:
 
-  ./Not_normalized/
+  *./Not_normalized/*
 
-relative to this folder.
+    relative to this folder.
 
-------------------------------------------------------------
 
-## ENVIRONMENT SETUP
+### ENVIRONMENT SETUP
 
-Capsule preprocessing:
+* Capsule preprocessing:
 
-  conda env create -f environment_script1.yml
-  conda activate script1
+  `conda env create -f environment_script1.yml`
+  
+  `conda activate script1`
 
-MCMC analysis (Apple Silicon):
+* MCMC analysis (Apple Silicon):
 
-  conda env create -f environment_script2_pymc_arm.yml
-  conda activate pymc_arm
+  `conda env create -f environment_script2_pymc_arm.yml`
+  
+  `conda activate pymc_arm`
 
-------------------------------------------------------------
 
-## NOTES
+### NOTES
 
 - All paths in the notebooks are relative and assume execution from this directory.
 - Large intermediate files, caches, and derived results are intentionally excluded.
 - The notebooks were cleaned using static analysis tools (ruff, vulture) to improve
   code clarity and reproducibility.
 
-------------------------------------------------------------
 
-CITATION
+### CITATION
 
 If you use these materials, please cite:
 
